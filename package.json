@@ -42,7 +42,7 @@
         "prepack": "rimraf lib/**/*.test.* lib/**/*.for-test.*"
     },
     "dependencies": {
-        "esifycss": "^1.3.0",
+        "esifycss": "^1.3.1",
         "parcel-bundler": "^1.12.3"
     },
     "devDependencies": {
