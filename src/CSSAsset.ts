@@ -1,7 +1,7 @@
 import * as Bundler from 'parcel-bundler';
 import {getSession} from './getSession';
 
-export default class CSSAsset extends Bundler.Asset {
+class CSSAsset extends Bundler.Asset {
 
     public constructor(
         name: string,
@@ -20,3 +20,5 @@ export default class CSSAsset extends Bundler.Asset {
     }
 
 }
+
+module.exports = CSSAsset;

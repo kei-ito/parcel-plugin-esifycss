@@ -1,5 +1,6 @@
 import Bundler from 'parcel-bundler';
 import {setDictionary} from './setDictionary';
+
 const plugin = (
     bundler: Bundler,
 ) => {
@@ -7,4 +8,5 @@ const plugin = (
     bundler.addAssetType('esifycss', require.resolve('./HelperAsset'));
     bundler.on('bundled', setDictionary);
 };
-module.exports = Object.assign(plugin, {default: plugin});
+
+export default plugin;
