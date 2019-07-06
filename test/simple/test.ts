@@ -1,8 +1,10 @@
 import * as path from 'path';
-import * as cpy from 'cpy';
-import * as $rimraf from 'rimraf';
-import * as Bundler from 'parcel-bundler';
-import esifycssPlugin from '..';
+import cpy from 'cpy';
+// import * as vm from 'vm';
+import $rimraf from 'rimraf';
+import Bundler from 'parcel-bundler';
+import esifycssPlugin from '../../lib';
+// import {createSandbox} from '../util';
 import test from 'ava';
 
 const rimraf = (
@@ -33,5 +35,6 @@ test('run', async (t) => {
     });
     esifycssPlugin(bundler);
     await bundler.bundle();
+    t.log(bundler.bundleHashes);
     t.is('g', 'g');
 });

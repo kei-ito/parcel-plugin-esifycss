@@ -1,28 +1,32 @@
-const path = require('path');
-const util = require('util');
-const fs = require('fs');
+import * as path from 'path';
+import * as util from 'util';
+import * as fs from 'fs';
+import * as esifycss from 'esifycss';
+import * as Bundler from 'parcel-bundler';
 const writeFile = util.promisify(fs.writeFile);
 const resolves = [];
-const esifycss = require('esifycss');
 /**
  * @type Promise<void> | undefined
  */
-let loading;
+let loading: Promise<void> | undefined;
 /**
  * @type esifycss.Session | undefined
  */
-let session;
+let session: esifycss.Session | undefined;
 /**
  * @param {esifycss.ISessionOptions | undefined} config
  * @returns {Promise<esifycss.Session>}
  */
-const getSession = (bundleContext) => {
+export const getSession = (
+    bundleContext: Bundler.Asset,
+): Promise<esifycss.Session> => {
     if (session) {
-        return session;
+        return Promise.resolve(session);
     }
     if (!loading && bundleContext) {
         const patterns = ['.esifycssrc', 'esifycss.config.js', 'package.json'];
-        loading = bundleContext.getConfig(patterns).then(async (config) => {
+        loading = bundleContext.getConfig<esifycss.ISessionOptions>(patterns)
+        .then(async (config) => {
             const ext = config.helper ? path.extname(config.helper) : '.js';
             const helper = path.join(__dirname, `esifycss.css${ext}`);
             session = new esifycss.Session({...config, helper});
@@ -36,5 +40,3 @@ const getSession = (bundleContext) => {
         resolves.push(resolve);
     });
 };
-
-module.exports = getSession;
