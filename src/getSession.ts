@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as esifycss from 'esifycss';
 import * as Bundler from 'parcel-bundler';
 const writeFile = util.promisify(fs.writeFile);
-const resolves = [];
+const resolves: Array<(session: esifycss.Session) => void> = [];
 /**
  * @type Promise<void> | undefined
  */

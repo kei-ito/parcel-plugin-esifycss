@@ -4,3 +4,4 @@ node_modules
 *.css.js
 *.css.ts
 dist
+lib
