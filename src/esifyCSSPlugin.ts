@@ -1,7 +1,7 @@
 import Bundler from 'parcel-bundler';
 import {setDictionary} from './setDictionary';
 
-export const plugin = (
+export const esifyCSSPlugin = (
     bundler: Bundler,
 ) => {
     bundler.addAssetType('css', require.resolve('./CSSAsset'));

@@ -1,2 +1,5 @@
-import {plugin} from './plugin';
-module.exports = Object.assign(plugin, {plugin});
+import {esifyCSSPlugin} from './esifyCSSPlugin';
+module.exports = Object.assign(esifyCSSPlugin, {
+    default: esifyCSSPlugin,
+    esifyCSSPlugin,
+});

@@ -1,3 +1,3 @@
-import {plugin} from './plugin';
-export {plugin};
-export default plugin;
+import {esifyCSSPlugin} from './esifyCSSPlugin';
+export {esifyCSSPlugin};
+export default esifyCSSPlugin;
