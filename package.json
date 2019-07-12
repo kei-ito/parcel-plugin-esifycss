@@ -17,7 +17,9 @@
         "lib"
     ],
     "scripts": {
-        "lint": "eslint --ext .ts src @types",
+        "lint:ts": "eslint --ext .ts src test @types",
+        "lint:js": "eslint test/*/src",
+        "lint": "run-p lint:*",
         "build:cleanup": "rimraf lib",
         "build:tsc": "tsc",
         "build:types": "cpy src/index.d.ts lib",
@@ -84,8 +86,7 @@
             },
             {
                 "files": [
-                    "./test/**/src/**/*",
-                    "./test/**/src-original/**/*"
+                    "./test/**/src/**/*"
                 ],
                 "env": {
                     "browser": true,
@@ -98,6 +99,15 @@
                 ],
                 "rules": {
                     "@typescript-eslint/no-explicit-any": "off"
+                }
+            },
+            {
+                "files": [
+                    "esifycss.config.js"
+                ],
+                "env": {
+                    "browser": false,
+                    "node": true
                 }
             }
         ]
