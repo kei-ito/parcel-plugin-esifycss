@@ -18,7 +18,7 @@
     ],
     "scripts": {
         "lint:ts": "eslint --ext .ts src test @types",
-        "lint:js": "eslint test/*/src",
+        "lint:js": "eslint test",
         "lint": "run-p lint:*",
         "build:cleanup": "rimraf lib",
         "build:tsc": "tsc",
