@@ -1,3 +1,13 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/kei-ito/parcel-plugin-esifycss/compare/v0.1.2...v0.1.3) (2019-07-18)
+
+
+### Bug Fixes
+
+* use different helper path if input is changed ([#2](https://github.com/kei-ito/parcel-plugin-esifycss/issues/2)) ([b4f60d8](https://github.com/kei-ito/parcel-plugin-esifycss/commit/b4f60d8))
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/kei-ito/parcel-plugin-esifycss/compare/v0.1.1...v0.1.2) (2019-07-08)
 
