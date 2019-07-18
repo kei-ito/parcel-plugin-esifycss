@@ -1,3 +1,11 @@
+import * as fs from 'fs';
+import * as util from 'util';
+import Bundler from 'parcel-bundler';
+import $rimraf from 'rimraf';
+import * as vm from 'vm';
+import esifycssPlugin from '..';
+const readFile = util.promisify(fs.readFile);
+
 class Element {
 
     public readonly tagName: string;
@@ -116,3 +124,50 @@ export const createSandbox = <TExports extends {}>(): ISandbox<TExports> => {
     };
     return sandbox;
 };
+
+export const build = async (
+    {input, outDir}: {
+        input: string,
+        outDir: string,
+    },
+) => {
+    const bundler = new Bundler(input, {
+        outDir,
+        watch: false,
+        cache: false,
+        hmr: false,
+        logLevel: 3,
+    });
+    esifycssPlugin(bundler);
+    await bundler.bundle();
+    const [jsFile, shouldBeUndefined] = [...bundler.bundleHashes]
+    .map(([name]) => name)
+    .filter((name) => name.endsWith('.js'));
+    if (shouldBeUndefined) {
+        throw new Error(`Found unexpected script: ${shouldBeUndefined}`);
+    }
+    return jsFile;
+};
+
+export const buildAndRun = async <TSandbox extends {}>(
+    params: {
+        input: string,
+        outDir: string,
+    },
+): Promise<ISandbox<TSandbox>> => {
+    const jsFile = await build(params);
+    const code = await readFile(jsFile, 'utf-8');
+    const sandbox = createSandbox<TSandbox>();
+    vm.runInNewContext(code, sandbox);
+    return sandbox;
+};
+
+export const rimraf = (
+    file: string,
+): Promise<void> => new Promise((resolve, reject) => $rimraf(file, (error) => {
+    if (error) {
+        reject(error);
+    } else {
+        resolve();
+    }
+}));
