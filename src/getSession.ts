@@ -1,10 +1,25 @@
 import * as path from 'path';
 import * as util from 'util';
+import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as esifycss from 'esifycss';
 import * as Bundler from 'parcel-bundler';
 const writeFile = util.promisify(fs.writeFile);
 const resolves: Array<(session: esifycss.Session) => void> = [];
+const getURLSafeBase64Hash = (
+    input: string,
+): string => {
+    const hash = crypto.createHash('sha256');
+    hash.update(input);
+    return hash.digest('base64').replace('+', '-').replace('/', '_').replace('=', '');
+};
+const getHelperPath = (
+    configuredPath: string | undefined,
+    inputPath: string,
+): string => {
+    const ext = configuredPath ? path.extname(configuredPath) : '.js';
+    return path.join(__dirname, `esifycss-${getURLSafeBase64Hash(inputPath).slice(0, 8)}.css${ext}`);
+};
 /**
  * @type Promise<void> | undefined
  */
@@ -27,8 +42,7 @@ export const getSession = (
         const patterns = ['.esifycssrc', 'esifycss.config.js', 'package.json'];
         loading = bundleContext.getConfig<esifycss.ISessionOptions>(patterns)
         .then(async (config) => {
-            const ext = config.helper ? path.extname(config.helper) : '.js';
-            const helper = path.join(__dirname, `esifycss.css${ext}`);
+            const helper = getHelperPath(config.helper, bundleContext.name);
             session = new esifycss.Session({...config, helper});
             await writeFile(helper, await session.getHelperScript());
             for (const resolve of resolves) {
