@@ -1,25 +1,38 @@
 import * as path from 'path';
+import * as fs from 'fs';
+import * as util from 'util';
+import * as vm from 'vm';
 import * as esifycss from 'esifycss';
+import Bundler from 'parcel-bundler';
+import esifycssPlugin from '../..';
+import {createSandbox} from '../util';
 import test from 'ava';
-import cpy from 'cpy';
-import {buildAndRun, rimraf} from '../util';
 
-test.before(async () => {
-    const source = path.join(__dirname, 'src-original');
-    const dest = path.join(__dirname, 'src');
-    await Promise.all([dest, path.join(__dirname, 'dist')].map(rimraf));
-    await cpy(source, dest);
-});
+const readFile = util.promisify(fs.readFile);
 
 test('run', async (t) => {
-    const {exports: {css1, css2, foo}} = await buildAndRun<{
+    const input = path.join(__dirname, 'src/index.html');
+    const bundler = new Bundler(input, {
+        outDir: path.join(__dirname, 'dist'),
+        watch: false,
+        cache: false,
+        hmr: false,
+        logLevel: 3,
+    });
+    esifycssPlugin(bundler);
+    await bundler.bundle();
+    const [jsFile, shouldBeUndefined] = [...bundler.bundleHashes]
+    .map(([name]) => name)
+    .filter((name) => name.endsWith('.js'));
+    t.is(typeof shouldBeUndefined, 'undefined');
+    const code = await readFile(jsFile, 'utf-8');
+    const sandbox = createSandbox<{
         css1: esifycss.IEsifyCSSResult,
         css2: esifycss.IEsifyCSSResult,
         foo: {foo1: string, foo2: string},
-    }>({
-        input: path.join(__dirname, 'src/index.html'),
-        outDir: path.join(__dirname, 'dist'),
-    });
+    }>();
+    vm.runInNewContext(code, sandbox);
+    const {exports: {css1, css2, foo}} = sandbox;
     if (css1 && css2 && foo) {
         const identifiers = [
             ...Object.entries(css1.className).map(([, value]) => value),
