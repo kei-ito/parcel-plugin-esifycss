@@ -45,7 +45,7 @@
         "browserstack-local": "^1.4.0",
         "conventional-changelog-cli": "^2.0.21",
         "cpy": "^7.3.0",
-        "cpy-cli": "^2.0.0",
+        "cpy-cli": "^3.0.0",
         "eslint": "^6.0.1",
         "husky": "^3.0.0",
         "lint-staged": "^9.1.0",
