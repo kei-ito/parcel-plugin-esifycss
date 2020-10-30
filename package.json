@@ -41,7 +41,7 @@
         "@types/rimraf": "^3.0.0",
         "@typescript-eslint/eslint-plugin": "^1.11.0",
         "@typescript-eslint/parser": "^1.11.0",
-        "ava": "^2.1.0",
+        "ava": "^3.0.0",
         "browserstack-local": "^1.4.0",
         "conventional-changelog-cli": "^2.0.21",
         "cpy": "^7.3.0",
